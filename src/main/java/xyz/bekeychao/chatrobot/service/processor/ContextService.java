@@ -12,30 +12,31 @@ import xyz.bekeychao.chatrobot.service.scene.BaseSceneContext;
  */
 @Service
 public class ContextService implements TextProcessor {
-    @Autowired
-    private SceneContextHolder sceneContextHolder;
+//    @Autowired
+//    private SceneContextHolder sceneContextHolder;
 
     @Override
     public String answer(BaseMsg message) throws AnswerException {
         try {
-            BaseSceneContext context = (BaseSceneContext)sceneContextHolder.getArgumentsByUserId(message.getFromUserName())[0];
+            BaseSceneContext context = (BaseSceneContext)SceneContextHolder.getArgumentsByUserId(message.getFromUserName())[0];
             String answer = context.act(message.getFromUserName(), message);
 
             if (context.isRemovedAfterResponse()) {
-                sceneContextHolder.removeArgumentsByUserId(message.getFromUserName());
+                SceneContextHolder.removeArgumentsByUserId(message.getFromUserName());
             }
 
             return answer;
 
         }catch (Exception e) {
-            return null;
+            e.printStackTrace();
+            throw new AnswerException(e.getMessage());
         }
     }
 
     @Override
     public Decision decide(BaseMsg message) {
         // 用户场景值有消息   arguments 第一位值为boolean值， 指示用户场景处理状态
-        if ( sceneContextHolder.getArgumentsByUserId(message.getFromUserName()) != null) {
+        if ( SceneContextHolder.getArgumentsByUserId(message.getFromUserName()) != null) {
             return Decision.ACCEPT;
         }
         return Decision.PASS;

@@ -27,8 +27,8 @@ public class ChatrobotApplicationTests {
     CentreMessageHandler handler;
 
 	@Test
-	public void contextLoads() {
-		String[] text = {"天王盖地虎", "日程提醒", "2018-04-23 13:13:00", "聊天机器人"};
+	public void contextLoads() throws Exception{
+		String[] text = {"天王盖地虎", "日程提醒", "2018-04-24 17:24:00", "聊天机器人"};
 		for (String s : text) {
 		    BaseMsg baseMsg = new BaseMsg();
 		    baseMsg.setFromUserName("username");
@@ -36,6 +36,7 @@ public class ChatrobotApplicationTests {
 		    baseMsg.setText(s);
             System.out.println(handler.textMsgHandle(baseMsg));
         }
+        Thread.sleep(100000);
 //		BaseMsg baseMsg = new BaseMsg();
 //		baseMsg.setText(text);
 //		BaseProcessor decision = manager.decision(baseMsg);

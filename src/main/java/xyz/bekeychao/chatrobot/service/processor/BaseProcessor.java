@@ -12,14 +12,25 @@ import org.slf4j.LoggerFactory;
 public interface BaseProcessor {
     Logger logger = LoggerFactory.getLogger(BaseProcessor.class);
 
+    /**
+     * 是否处理消息
+     * @param message
+     * @return {@link Decision} 按需返回你的决定
+     */
     Decision decide(BaseMsg message);
 
+
+    /**
+     * 处理消息，但不会打断消息的传播
+     * @param message
+     */
     default void process(BaseMsg message) {
         if ( logger.isDebugEnabled() ) {
-            logger.debug("你请求处理了一个消息， 但是却没有实现 消息ID = " + message.getMsgId());
+            logger.debug("你请求处理了一个消息， 但是却没有实现 class = " + this.getClass().getName());
         }
         // ignore
     }
+
 
     enum Decision {
         /**

@@ -70,7 +70,7 @@ public class TaskService {
      * @return Data instant
      */
     private static Date convertLDTtoDate(LocalDateTime time) {
-        return Date.from(time.atZone(ZoneId.of("+8")).toInstant());
+        return Date.from(time.atZone(ZoneId.systemDefault()).toInstant());
     }
 
     public boolean stopTask(String uuid) {

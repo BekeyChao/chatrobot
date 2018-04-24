@@ -8,7 +8,6 @@ import xyz.bekeychao.chatrobot.service.scene.BaseSceneContext;
 import java.util.HashMap;
 import java.util.Map;
 
-@Service
 public class SceneContextHolder {
     private static Map<String, BaseSceneContext> sceneContextMap = new HashMap<>();
 
@@ -20,23 +19,25 @@ public class SceneContextHolder {
 //        sceneContextMap.put(alarmCreateScene.sceneId(), alarmCreateScene);
 //    }
 
-    public BaseSceneContext getSceneBySceneId(String sceneId) {
-        return sceneContextMap.get(sceneId);
+    public static BaseSceneContext getSceneBySceneId(String sceneId) {
+        if (sceneContextMap.containsKey(sceneId))
+            return sceneContextMap.get(sceneId);
+        throw new IllegalArgumentException("不存在指定场景ID" + sceneId);
     }
 
-    public Object[] getArgumentsByUserId(String userId) {
+    public static Object[] getArgumentsByUserId(String userId) {
         return argumentsMap.get(userId);
     }
 
-    public void setArgumentsByUserId(String userId, Object[] args) {
+    public static void setArgumentsByUserId(String userId, Object[] args) {
         argumentsMap.put(userId, args);
     }
 
-    public void addSceneContext(BaseSceneContext context) {
+    public static void addSceneContext(BaseSceneContext context) {
         sceneContextMap.put(context.sceneId(), context);
     }
 
-    public void removeArgumentsByUserId(String userId) {
+    public static void removeArgumentsByUserId(String userId) {
         argumentsMap.remove(userId);
     }
 

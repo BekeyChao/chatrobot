@@ -12,8 +12,9 @@ import xyz.bekeychao.chatrobot.service.scene.BaseSceneContext;
 /**
  * 模块指令响应器， 用于开启或关闭模块功能
  * 初步打算实现 日程提醒及 聊天机器人模块
+ * 默认双模块都是启用的，所以这个处理器的没有使用
  */
-@Service
+//@Service
 public class ModuleProcess implements TextProcessor{
     private static final String OPEN_CHAT = "聊天机器人";
 
@@ -25,20 +26,20 @@ public class ModuleProcess implements TextProcessor{
 
     private static final String[] KEY_WORD_LIST = {OPEN_CHAT, CLOSE_CHAT, ALARM_CREATE, ALARM_CANCEL};
 
-    @Autowired
-    SceneContextHolder sceneContextHolder;
+//    @Autowired
+//    SceneContextHolder sceneContextHolder;
     @Override
     public String answer(BaseMsg message) throws AnswerException {
         String text = message.getText();
-        if (OPEN_CHAT.equals(text)) {
-            return "如果可以，我想陪你聊到天荒地老";
-        }
-        if (CLOSE_CHAT.equals(text)) {
-            return "我挥一挥衣袖，不带走一片云彩";
-        }
+//        if (OPEN_CHAT.equals(text)) {
+//            return "如果可以，我想陪你聊到天荒地老";
+//        }
+//        if (CLOSE_CHAT.equals(text)) {
+//            return "我挥一挥衣袖，不带走一片云彩";
+//        }
         if (ALARM_CREATE.equals(text)) {
-            BaseSceneContext alarmCreate = new AlarmCreateScene();
-            sceneContextHolder.setArgumentsByUserId(message.getFromUserName(), new Object[]{alarmCreate});
+            BaseSceneContext alarmCreate = SceneContextHolder.getSceneBySceneId("AlarmCreate");
+            SceneContextHolder.setArgumentsByUserId(message.getFromUserName(), new Object[]{alarmCreate});
             return "请按 yyyy-MM-dd HH:mm:ss 格式回复";
         }
         if (ALARM_CANCEL.equals(text)) {
@@ -49,12 +50,12 @@ public class ModuleProcess implements TextProcessor{
 
     @Override
     public Decision decide(BaseMsg message) {
-        String text = message.getText();
-        for (String key : KEY_WORD_LIST) {
-            if (key.equals(text)) {
-                return Decision.ACCEPT;
-            }
-        }
+//        String text = message.getText();
+//        for (String key : KEY_WORD_LIST) {
+//            if (key.equals(text)) {
+//                return Decision.ACCEPT;
+//            }
+//        }
         return Decision.PASS;
     }
 }

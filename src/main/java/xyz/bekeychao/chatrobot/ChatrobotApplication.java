@@ -7,10 +7,16 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
 
+import java.time.ZoneId;
+import java.util.TimeZone;
+
 @SpringBootApplication
 public class ChatrobotApplication {
 
 	public static void main(String[] args) {
+		// 系统默认时区设定为东八区
+		TimeZone.setDefault(TimeZone.getTimeZone(ZoneId.of("+8")));
+
 		SpringApplication.run(ChatrobotApplication.class, args);
 	}
 

@@ -18,8 +18,8 @@ public class ProcessorManager {
 
     @Autowired
     public ProcessorManager(CommandTextProcessor commandTextProcessor, ContextService contextService, TuringTextProcessor tulinTextProcessor,
-                            UserFilter userFilter,ModuleProcess moduleProcess) {
-        processors = Arrays.asList(commandTextProcessor,  userFilter, contextService, moduleProcess ,tulinTextProcessor);
+                            UserFilter userFilter,ScheduleProcessor scheduleProcessor) {
+        processors = Arrays.asList(commandTextProcessor,  userFilter, contextService, scheduleProcessor ,tulinTextProcessor);
     }
 
 

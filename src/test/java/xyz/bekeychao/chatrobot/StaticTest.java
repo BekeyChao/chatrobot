@@ -2,6 +2,7 @@ package xyz.bekeychao.chatrobot;
 
 import org.junit.Test;
 import xyz.bekeychao.chatrobot.service.TaskService;
+import xyz.bekeychao.chatrobot.util.RegUtil;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -25,13 +26,15 @@ public class StaticTest {
 //        Map<String,String> map = new HashMap<>();
 //
 //        map.get("2233");
-        String date = "2019-08-20";
+        String date = "dfsf2019-08-20 12:20:30";
 
-        String err = "dfdjkldjfs";
-
-        LocalDate localDate = LocalDate.parse(date ,DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-        System.out.println(localDate);
-        LocalDate localDate1 = LocalDate.parse(err ,DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-        System.out.println(localDate1);
+        String s = RegUtil.convertDateTime(date);
+        System.out.println(s);
+//        String err = "dfdjkldjfs";
+//
+//        LocalDate localDate = LocalDate.parse(date ,DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+//        System.out.println(localDate);
+//        LocalDate localDate1 = LocalDate.parse(err ,DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+//        System.out.println(localDate1);
     }
 }
