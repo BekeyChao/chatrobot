@@ -9,13 +9,13 @@ import xyz.bekeychao.chatrobot.domain.AlarmRunnable;
 import xyz.bekeychao.chatrobot.exception.SceneException;
 import xyz.bekeychao.chatrobot.service.TaskService;
 import xyz.bekeychao.chatrobot.service.manager.SceneContextHolder;
-import xyz.bekeychao.chatrobot.util.RegUtil;
+import xyz.bekeychao.chatrobot.util.RegularUtil;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeParseException;
+import java.util.Arrays;
 
 @Service
 public class AlarmCreateScene implements BaseSceneContext{
@@ -39,18 +39,21 @@ public class AlarmCreateScene implements BaseSceneContext{
         String text = message.getText();
         String[] spilt = text.split("提醒我");
         if (spilt.length < 2 || spilt[1].trim().equals("")) {
-            return "我有点笨，按指定格式回复我吧。重新按 定制提醒 yyyy-MM-dd HH:mm:ss 提醒我 内容 定制哦！";
+            return "我有点笨，按指定格式回复我吧，缺少提醒内容，请重新按 定制提醒 yyyy-MM-dd HH:mm:ss 提醒我 内容 定制哦！";
         }
         // 语义分析
         try {
 //            LocalDateTime date = LocalDateTime.parse(text, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
             LocalDate date;LocalTime time = AM8;
-            String dateString = RegUtil.convertDate(spilt[0]);
+            String dateString = RegularUtil.convertDate(spilt[0]);
             if (dateString == null) {
-                return "我有点笨，按指定格式回复我吧！";
+                if (logger.isDebugEnabled()) {
+                    logger.debug(Arrays.toString(spilt));
+                }
+                return "我有点笨，按指定格式回复我吧。重新按 定制提醒 yyyy-MM-dd HH:mm:ss 提醒我 内容 定制哦！";
             }
             date = LocalDate.parse(dateString, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-            String timeString = RegUtil.convertTime(spilt[0]);
+            String timeString = RegularUtil.convertTime(spilt[0]);
             if (timeString != null) {
                 time = LocalTime.parse(timeString, DateTimeFormatter.ofPattern("HH:mm:ss"));
             }
@@ -64,7 +67,7 @@ public class AlarmCreateScene implements BaseSceneContext{
             AlarmRunnable runnable = new AlarmRunnable(userId, spilt[1].trim());
             taskService.scheduleOnce(runnable, dateTime);
 
-            return String.format("宝宝记住了，我将在 %s 发消息提醒 %s", dateTime.toString(), spilt[1].trim());
+            return String.format("宝宝记住了，我将在 %s 发消息提醒你 %s", dateTime.toString(), spilt[1].trim());
         }  catch (Exception e) {
             logger.warn("未知原因导致创建日程异常" , e);
             throw new SceneException(e);
