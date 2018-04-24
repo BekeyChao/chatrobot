@@ -27,8 +27,8 @@ public class RobotController {
     @RequestMapping("/start")
     public void start(HttpServletResponse response, HttpServletRequest request) throws ServletException, IOException {
         myLoginService.setResponse(response);
-        Wechat wechat = new Wechat(messageHandler, "D:");
         LoginController.setLoginService(myLoginService);
+        Wechat wechat = new Wechat(messageHandler, "D:");
 //        wechat.setLoginService(myLoginService);
 //        wechat.login();
 //        myLoginService.img(response);

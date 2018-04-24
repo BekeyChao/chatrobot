@@ -28,7 +28,7 @@ public class ChatrobotApplicationTests {
 
 	@Test
 	public void contextLoads() {
-		String[] text = {"active robot", "今天天气怎么样", "你在哪里", "disable robot", "在说说话"};
+		String[] text = {"天王盖地虎", "日程提醒", "2018-04-23 13:13:00", "聊天机器人"};
 		for (String s : text) {
 		    BaseMsg baseMsg = new BaseMsg();
 		    baseMsg.setFromUserName("username");
@@ -42,8 +42,8 @@ public class ChatrobotApplicationTests {
 
 	}
 
-	@Autowired
-    TaskService taskService;
+//	@Autowired
+//    TaskService taskService;
 	@Test
     public void task() throws InterruptedException {
 //        ScheduledFuture<?> log_some = taskService.createTask(new Runnable() {

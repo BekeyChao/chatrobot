@@ -59,6 +59,7 @@ public class TaskService {
     }
 
     private AlarmFuture put(ScheduledFuture<?> future, String cron, LocalDateTime time, Long rate) {
+//        if (futureHolder == null)
         String uuid = UUID.randomUUID().toString();
         futureHolder.putFuture(uuid, future);
         return new AlarmFuture(uuid, null, cron, null);

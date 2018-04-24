@@ -16,7 +16,7 @@ import java.util.Map;
 @Service
 public class TuringService {
     // 图灵机器人的应用key， 可以自己申请
-    @Value("chatrobot.turing.key")
+    @Value("${chatrobot.turing.key}")
     private String key;
 
     private static final String URL = "http://www.tuling123.com/openapi/api";

@@ -49,6 +49,7 @@ public class MyLoginService extends LoginServiceImpl {
             out.close();
         } catch (Exception e) {
 //            LOG.info(e.getMessage());
+            logger.info(e.getMessage(), e);
             return false;
         }
 
