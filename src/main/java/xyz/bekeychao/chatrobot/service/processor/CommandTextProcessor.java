@@ -9,16 +9,21 @@ import xyz.bekeychao.chatrobot.exception.AnswerException;
 /**
  * 强指令响应器， 用于响应固定系统基本指令， 如开启机器人， 关闭机器人等
  * 强指令响应应有最高优先级，与严格的匹配模式
+ * @author BekeyChao@github.com
  */
 @Service
 public class CommandTextProcessor implements TextProcessor {
 
-    @Autowired
-    UserFilter userFilter;
+    private final UserFilter userFilter;
 
     private static final String ACTIVE = "天王盖地虎";
     private static final String DISABLE = "disable robot";
     private static final String[] KEY_WORD_ARRAY = { ACTIVE, DISABLE};
+
+    @Autowired
+    public CommandTextProcessor(UserFilter userFilter) {
+        this.userFilter = userFilter;
+    }
 
     @Override
     public String answer(BaseMsg message) throws AnswerException {

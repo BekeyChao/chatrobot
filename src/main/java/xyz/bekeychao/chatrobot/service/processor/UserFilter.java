@@ -9,7 +9,9 @@ import java.util.Set;
 /**
  * 服务响应过滤器， 可以用于指定服务于特定用户
  * 默认位于强指令响应器之后
+ * @author BekeyChao@github.com
  */
+
 @Component
 public class UserFilter implements BaseProcessor {
 //    private Logger logger = LoggerFactory.getLogger(UserFilter.class);

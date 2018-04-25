@@ -9,6 +9,7 @@ public interface TextProcessor extends BaseProcessor {
      * @param message
      * @return 返回给消息来源方的内容， null if you want not to answer anything
      * @throws AnswerException
+     * @author BekeyChao@github.com
      */
     String answer(BaseMsg message) throws AnswerException;
 }

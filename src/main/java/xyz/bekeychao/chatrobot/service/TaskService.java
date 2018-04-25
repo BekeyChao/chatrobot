@@ -13,13 +13,20 @@ import java.util.Date;
 import java.util.UUID;
 import java.util.concurrent.ScheduledFuture;
 
+/**
+ * @author BekeyChao@github.com
+ */
 @Service
 public class TaskService {
-    @Autowired
-    private ThreadPoolTaskScheduler threadPoolTaskScheduler;
+    private final ThreadPoolTaskScheduler threadPoolTaskScheduler;
+
+    private final ScheduleFutureHolder futureHolder;
 
     @Autowired
-    private ScheduleFutureHolder futureHolder;
+    public TaskService(ThreadPoolTaskScheduler threadPoolTaskScheduler, ScheduleFutureHolder futureHolder) {
+        this.threadPoolTaskScheduler = threadPoolTaskScheduler;
+        this.futureHolder = futureHolder;
+    }
 
     /**
      * 以corn表达式创建一个任务
@@ -73,8 +80,12 @@ public class TaskService {
         return Date.from(time.atZone(ZoneId.systemDefault()).toInstant());
     }
 
-    public boolean stopTask(String uuid) {
-        return futureHolder.getFuture(uuid).cancel(false);
+    public boolean cancelSchedule(String uuid) {
+        ScheduledFuture<?> future = futureHolder.getFuture(uuid);
+        if (future == null) {
+            return false;
+        }
+        return future.cancel(false);
     }
 
 }

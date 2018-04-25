@@ -11,6 +11,9 @@ import xyz.bekeychao.chatrobot.service.manager.ProcessorManager;
 import xyz.bekeychao.chatrobot.service.processor.BaseProcessor;
 import xyz.bekeychao.chatrobot.service.processor.TextProcessor;
 
+/**
+ * @author BekeyChao@github.com
+ */
 @Service
 public class CentreMessageHandler implements IMsgHandlerFace {
     private final Logger logger = LoggerFactory.getLogger(CentreMessageHandler.class);
@@ -28,7 +31,7 @@ public class CentreMessageHandler implements IMsgHandlerFace {
                 return processor.answer(baseMsg);
             }catch (AnswerException e) {
                 logger.error("An answerException happened", e);
-                return  null;
+                return  "我的爸爸写了个bug，可能是缺少女朋友导致，要关心一下吗";
             }
         }
         return null;

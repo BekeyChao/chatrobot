@@ -3,9 +3,11 @@ package xyz.bekeychao.chatrobot.controller;
 import cn.zhouyafeng.itchat4j.Wechat;
 import cn.zhouyafeng.itchat4j.api.WechatTools;
 import cn.zhouyafeng.itchat4j.controller.LoginController;
+import cn.zhouyafeng.itchat4j.core.Core;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import xyz.bekeychao.chatrobot.service.CentreMessageHandler;
 import xyz.bekeychao.chatrobot.service.MyLoginService;
 
@@ -14,15 +16,22 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+/**
+ * @author BekeyChao@github.com
+ */
 @Controller
 @RequestMapping("/robot")
 public class RobotController {
 
-    @Autowired
-    CentreMessageHandler messageHandler;
+    private final CentreMessageHandler messageHandler;
+
+    private final MyLoginService myLoginService;
 
     @Autowired
-    MyLoginService myLoginService;
+    public RobotController(CentreMessageHandler messageHandler, MyLoginService myLoginService) {
+        this.messageHandler = messageHandler;
+        this.myLoginService = myLoginService;
+    }
 
     @RequestMapping("/start")
     public void start(HttpServletResponse response, HttpServletRequest request) throws ServletException, IOException {
@@ -37,15 +46,22 @@ public class RobotController {
 
     @RequestMapping("/old")
     public void old() {
-        Wechat wechat = new Wechat(messageHandler, "D:");
-//        wechat.login();
-        wechat.start();
+//        Wechat wechat = new Wechat(messageHandler, "D:");
+////        wechat.login();
+//        wechat.start();
     }
 
+    @ResponseBody
     @RequestMapping("/logout")
-    public void logout() {
+    public String logout() {
         WechatTools.logout();
+        return "关闭";
     }
 
+    @ResponseBody
+    @RequestMapping("/online")
+    public String online() {
+        return Core.getInstance().isAlive() ? "在线" : "离线";
+    }
 
 }

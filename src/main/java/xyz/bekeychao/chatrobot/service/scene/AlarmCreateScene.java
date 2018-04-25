@@ -4,11 +4,13 @@ import cn.zhouyafeng.itchat4j.beans.BaseMsg;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
+import xyz.bekeychao.chatrobot.domain.AlarmFuture;
 import xyz.bekeychao.chatrobot.domain.AlarmRunnable;
 import xyz.bekeychao.chatrobot.exception.SceneException;
 import xyz.bekeychao.chatrobot.service.TaskService;
-import xyz.bekeychao.chatrobot.service.manager.SceneContextHolder;
+import xyz.bekeychao.chatrobot.service.manager.ScheduleFutureHolder;
 import xyz.bekeychao.chatrobot.util.RegularUtil;
 
 import java.time.LocalDate;
@@ -16,8 +18,12 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
+import java.util.UUID;
 
-@Service
+/**
+ * @author BekeyChao@github.com
+ */
+@Component
 public class AlarmCreateScene implements BaseSceneContext{
     private static LocalTime AM8 = LocalTime.of(8,0 );
 
@@ -25,8 +31,13 @@ public class AlarmCreateScene implements BaseSceneContext{
 //    @Autowired
 //    private SceneContextHolder sceneContextHolder;
 
+    private final TaskService taskService;
+
+
     @Autowired
-    private TaskService taskService;
+    public AlarmCreateScene(TaskService taskService, ScheduleFutureHolder scheduleFutureHolder) {
+        this.taskService = taskService;
+    }
 
     @Override
     public String sceneId() {
@@ -34,7 +45,7 @@ public class AlarmCreateScene implements BaseSceneContext{
     }
 
     @Override
-    public String act(String userId, BaseMsg message) throws SceneException{
+    public String act(String userId, BaseMsg message){
 
         String text = message.getText();
         String[] spilt = text.split("提醒我");
@@ -65,17 +76,13 @@ public class AlarmCreateScene implements BaseSceneContext{
             }
 
             AlarmRunnable runnable = new AlarmRunnable(userId, spilt[1].trim());
-            taskService.scheduleOnce(runnable, dateTime);
-
-            return String.format("宝宝记住了，我将在 %s 发消息提醒你 %s", dateTime.toString(), spilt[1].trim());
+            // taskService
+            AlarmFuture alarmFuture = taskService.scheduleOnce(runnable, dateTime);
+            // TODO 可以将alarmFuture 持久化，达到任务取消的目的
+            return String.format("宝宝记住了，我将在 %s 发消息提醒你 %s， 任务ID %s", dateTime.toString(), spilt[1].trim(), alarmFuture.getUuid());
         }  catch (Exception e) {
             logger.warn("未知原因导致创建日程异常" , e);
-            throw new SceneException(e);
-        } finally {
-
-            if (isRemovedAfterResponse()) {
-                SceneContextHolder.removeArgumentsByUserId(userId);
-            }
+            return "我可能遇到了什么麻烦，回头再来找我吧";
         }
     }
 
@@ -85,6 +92,6 @@ public class AlarmCreateScene implements BaseSceneContext{
 
     @Override
     public long express() {
-        return 10000;
+        return -1L;
     }
 }

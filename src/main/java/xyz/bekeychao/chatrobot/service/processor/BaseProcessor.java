@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
  * 处理器接口， 定义decide用于指示处理器是否响应消息
  *
  * 提供默认的process方法， 用于提供在 {@link Decision} 响应PROCESS时处理消息
+ * @author BekeyChao@github.com
  */
 public interface BaseProcessor {
     Logger logger = LoggerFactory.getLogger(BaseProcessor.class);

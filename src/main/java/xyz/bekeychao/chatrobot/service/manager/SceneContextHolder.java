@@ -8,6 +8,12 @@ import xyz.bekeychao.chatrobot.service.scene.BaseSceneContext;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * 场景信息储存组件
+ * 组件共持有两个内容  场景对象 方便通过sceneId获取
+ * 用户场景临时消息， Object[]  约定数组首位是场景对象
+ * @author BekeyChao@github.com
+ */
 public class SceneContextHolder {
     private static Map<String, BaseSceneContext> sceneContextMap = new HashMap<>();
 

@@ -13,6 +13,9 @@ import org.springframework.stereotype.Service;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * @author BekeyChao@github.com
+ */
 @Service
 public class TuringService {
     // 图灵机器人的应用key， 可以自己申请
@@ -25,11 +28,11 @@ public class TuringService {
 
     private final MyHttpClient httpClient = MyHttpClient.getInstance();
 
-    public String chat(String text) {
-        Map<String, String> paramMap = new HashMap<String, String>();
+    public String chat(String text, String user) {
+        Map<String, String> paramMap = new HashMap<>();
         paramMap.put("key", key);
         paramMap.put("info", text);
-        paramMap.put("userid", "123456");
+        paramMap.put("userid", user);
         String paramStr = JSON.toJSONString(paramMap);
 
         try {

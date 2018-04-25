@@ -3,6 +3,9 @@ package xyz.bekeychao.chatrobot.util;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * @author BekeyChao@github.com
+ */
 public class RegularUtil {
 
     /**
@@ -22,6 +25,16 @@ public class RegularUtil {
 
     public static String convertTime(String s) {
         Pattern p = Pattern.compile("\\d{2}:\\d{2}:\\d{2}");
+        return match(s, p);
+    }
+
+    /**
+     * 匹配{@link java.util.UUID} 随机生成的字符串，匹配小写
+     * @param s
+     * @return
+     */
+    public static String convertUUID(String s) {
+        Pattern p = Pattern.compile("[a-z0-9]{8}-[a-z0-9]{4}-4[a-z0-9]{3}-[a-z0-9]{4}-[a-z0-9]{12}");
         return match(s, p);
     }
 

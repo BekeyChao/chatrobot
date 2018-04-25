@@ -2,6 +2,9 @@ package xyz.bekeychao.chatrobot.domain;
 
 import java.time.LocalDateTime;
 
+/**
+ * @author BekeyChao@github.com
+ */
 public class AlarmFuture {
 
     // 维护唯一Id

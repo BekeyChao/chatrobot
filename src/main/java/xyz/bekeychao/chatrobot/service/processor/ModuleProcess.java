@@ -13,6 +13,7 @@ import xyz.bekeychao.chatrobot.service.scene.BaseSceneContext;
  * 模块指令响应器， 用于开启或关闭模块功能
  * 初步打算实现 日程提醒及 聊天机器人模块
  * 默认双模块都是启用的，所以这个处理器的没有使用
+ * @author BekeyChao@github.com
  */
 //@Service
 public class ModuleProcess implements TextProcessor{

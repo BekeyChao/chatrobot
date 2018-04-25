@@ -6,6 +6,9 @@ import cn.zhouyafeng.itchat4j.api.WechatTools;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * @author BekeyChao@github.com
+ */
 public class AlarmRunnable implements Runnable{
     private final Logger logger = LoggerFactory.getLogger(AlarmRunnable.class);
 

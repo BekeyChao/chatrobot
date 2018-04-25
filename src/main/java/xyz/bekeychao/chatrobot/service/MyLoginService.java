@@ -15,7 +15,9 @@ import org.springframework.web.client.RestTemplate;
 import javax.servlet.http.HttpServletResponse;
 import java.io.OutputStream;
 
-
+/**
+ * @author BekeyChao@github.com
+ */
 @Service
 public class MyLoginService extends LoginServiceImpl {
     private byte[] qrData;

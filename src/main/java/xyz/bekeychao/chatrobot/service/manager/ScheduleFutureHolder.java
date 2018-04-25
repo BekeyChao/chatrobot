@@ -7,7 +7,8 @@ import java.util.Map;
 import java.util.concurrent.ScheduledFuture;
 
 /**
- * 管理任务的池子
+ * 管理任务的池子， 方便查询任务状态和取消任务
+ * @author BekeyChao@github.com
  */
 @Component
 public class ScheduleFutureHolder {

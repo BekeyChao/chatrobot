@@ -10,20 +10,25 @@ import org.springframework.stereotype.Service;
 import xyz.bekeychao.chatrobot.service.TuringService;
 
 /**
- * 图灵机器人响应器， 调用图灵机器人接口与用户聊天响应， 目前只实现文本聊天
+ * 图灵机器人响应器， 调用图灵机器人接口与用户聊天响应， 目前只实现文本聊天.
+ * @author BekeyChao@github.com
  */
 @Service
 public class TuringTextProcessor implements TextProcessor {
 
     private final Logger logger = LoggerFactory.getLogger(TuringTextProcessor.class);
 
+    private final TuringService turingService;
+
     @Autowired
-    private TuringService turingService;
+    public TuringTextProcessor(TuringService turingService) {
+        this.turingService = turingService;
+    }
 
 
     public String answer(BaseMsg message) {
         String text = message.getText();
-        return turingService.chat(text);
+        return turingService.chat(text, message.getFromUserName());
     }
 
 

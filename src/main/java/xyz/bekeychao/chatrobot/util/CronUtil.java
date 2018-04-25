@@ -1,12 +1,11 @@
 package xyz.bekeychao.chatrobot.util;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.util.Arrays;
-import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
+/**
+ * @author BekeyChao@github.com
+ */
 public class CronUtil {
 
     private static final String ex = "0 0 0 1 1 * *";

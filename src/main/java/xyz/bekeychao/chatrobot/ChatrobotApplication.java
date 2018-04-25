@@ -20,13 +20,4 @@ public class ChatrobotApplication {
 		SpringApplication.run(ChatrobotApplication.class, args);
 	}
 
-	@Bean
-	public ThreadPoolTaskScheduler threadPoolTaskScheduler() {
-		Logger logger = LoggerFactory.getLogger(ThreadPoolTaskScheduler.class);
-		ThreadPoolTaskScheduler scheduler = new ThreadPoolTaskScheduler();
-		scheduler.setErrorHandler((exception) -> {
-			logger.warn("An exception happened in task schedule", exception);
-		});
-		return scheduler;
-	}
 }
