@@ -1,21 +1,25 @@
 package xyz.bekeychao.chatrobot;
 
 import org.junit.Test;
-import xyz.bekeychao.chatrobot.service.TaskService;
-import xyz.bekeychao.chatrobot.util.RegUtil;
+import xyz.bekeychao.chatrobot.util.RegularUtil;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.UUID;
 
 public class StaticTest {
     @Test
     public void test() {
-        LocalDate date = LocalDate.now();
-        LocalTime time = LocalTime.now();
+//        LocalDate date = LocalDate.now();
+//        LocalTime time = LocalTime.now();
+        for (int i = 0; i < 20000; i++) {
+            String uuid = UUID.randomUUID().toString();
+            String uid = RegularUtil.convertUUID(uuid);
+            if (uid == null) {
+                System.out.println(uuid);
+            }
+        }
+
 
 //        System.out.println(CronUtil.atOnceTime(date, time));
     }
@@ -28,7 +32,7 @@ public class StaticTest {
 //        map.get("2233");
         String date = "dfsf2019-08-20 12:20:30";
 
-        String s = RegUtil.convertDateTime(date);
+        String s = RegularUtil.convertDateTime(date);
         System.out.println(s);
 //        String err = "dfdjkldjfs";
 //

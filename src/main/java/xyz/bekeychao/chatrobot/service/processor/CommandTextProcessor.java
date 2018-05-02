@@ -16,7 +16,7 @@ public class CommandTextProcessor implements TextProcessor {
 
     private final UserFilter userFilter;
 
-    private static final String ACTIVE = "天王盖地虎";
+    private static final String ACTIVE = "聊天啊";
     private static final String DISABLE = "disable robot";
     private static final String[] KEY_WORD_ARRAY = { ACTIVE, DISABLE};
 

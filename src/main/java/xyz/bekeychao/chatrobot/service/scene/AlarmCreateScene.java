@@ -5,11 +5,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
 import xyz.bekeychao.chatrobot.domain.AlarmFuture;
 import xyz.bekeychao.chatrobot.domain.AlarmRunnable;
-import xyz.bekeychao.chatrobot.exception.SceneException;
-import xyz.bekeychao.chatrobot.service.TaskService;
+import xyz.bekeychao.chatrobot.service.ScheduleService;
 import xyz.bekeychao.chatrobot.service.manager.ScheduleFutureHolder;
 import xyz.bekeychao.chatrobot.util.RegularUtil;
 
@@ -18,7 +16,6 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
-import java.util.UUID;
 
 /**
  * @author BekeyChao@github.com
@@ -31,12 +28,12 @@ public class AlarmCreateScene implements BaseSceneContext{
 //    @Autowired
 //    private SceneContextHolder sceneContextHolder;
 
-    private final TaskService taskService;
+    private final ScheduleService scheduleService;
 
 
     @Autowired
-    public AlarmCreateScene(TaskService taskService, ScheduleFutureHolder scheduleFutureHolder) {
-        this.taskService = taskService;
+    public AlarmCreateScene(ScheduleService scheduleService, ScheduleFutureHolder scheduleFutureHolder) {
+        this.scheduleService = scheduleService;
     }
 
     @Override
@@ -61,7 +58,7 @@ public class AlarmCreateScene implements BaseSceneContext{
                 if (logger.isDebugEnabled()) {
                     logger.debug(Arrays.toString(spilt));
                 }
-                return "我有点笨，按指定格式回复我吧。重新按 定制提醒 yyyy-MM-dd HH:mm:ss 提醒我 内容 定制哦！";
+                return "我有点笨，按指定格式回复我吧。重新发 定制提醒 yyyy-MM-dd HH:mm:ss 提醒我 提醒内容 定制哦！";
             }
             date = LocalDate.parse(dateString, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
             String timeString = RegularUtil.convertTime(spilt[0]);
@@ -77,7 +74,7 @@ public class AlarmCreateScene implements BaseSceneContext{
 
             AlarmRunnable runnable = new AlarmRunnable(userId, spilt[1].trim());
             // taskService
-            AlarmFuture alarmFuture = taskService.scheduleOnce(runnable, dateTime);
+            AlarmFuture alarmFuture = scheduleService.scheduleOnce(runnable, dateTime);
             // TODO 可以将alarmFuture 持久化，达到任务取消的目的
             return String.format("宝宝记住了，我将在 %s 发消息提醒你 %s， 任务ID %s", dateTime.toString(), spilt[1].trim(), alarmFuture.getUuid());
         }  catch (Exception e) {

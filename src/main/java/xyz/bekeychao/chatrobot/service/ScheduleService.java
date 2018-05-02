@@ -17,13 +17,13 @@ import java.util.concurrent.ScheduledFuture;
  * @author BekeyChao@github.com
  */
 @Service
-public class TaskService {
+public class ScheduleService {
     private final ThreadPoolTaskScheduler threadPoolTaskScheduler;
 
     private final ScheduleFutureHolder futureHolder;
 
     @Autowired
-    public TaskService(ThreadPoolTaskScheduler threadPoolTaskScheduler, ScheduleFutureHolder futureHolder) {
+    public ScheduleService(ThreadPoolTaskScheduler threadPoolTaskScheduler, ScheduleFutureHolder futureHolder) {
         this.threadPoolTaskScheduler = threadPoolTaskScheduler;
         this.futureHolder = futureHolder;
     }
@@ -36,7 +36,6 @@ public class TaskService {
      * @param cron
      * @return
      */
-    @Deprecated
     public AlarmFuture scheduleCron(Runnable runnable, String cron) {
         ScheduledFuture<?> future = threadPoolTaskScheduler.schedule(runnable, new CronTrigger(cron));
         return put(future, cron, null, null);

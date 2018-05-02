@@ -9,7 +9,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.scheduling.support.CronTrigger;
 import org.springframework.test.context.junit4.SpringRunner;
 import xyz.bekeychao.chatrobot.service.CentreMessageHandler;
-import xyz.bekeychao.chatrobot.service.TaskService;
 import xyz.bekeychao.chatrobot.service.manager.ProcessorManager;
 import xyz.bekeychao.chatrobot.service.processor.BaseProcessor;
 import xyz.bekeychao.chatrobot.service.processor.TextProcessor;
@@ -28,7 +27,16 @@ public class ChatrobotApplicationTests {
 
 	@Test
 	public void contextLoads() throws Exception{
-		String[] text = {"天王盖地虎", "日程提醒", "2018-04-24 17:24:00", "聊天机器人"};
+		String[] text = {"天王盖地虎", "定制提醒 2018-04-24 22:32:00 提醒我 睡觉", "聊天机器人"};
+		send(text);
+		Thread.sleep(100000);
+//		BaseMsg baseMsg = new BaseMsg();
+//		baseMsg.setText(text);
+//		BaseProcessor decision = manager.decision(baseMsg);
+
+	}
+
+	private void send(String[] text) {
 		for (String s : text) {
 		    BaseMsg baseMsg = new BaseMsg();
 		    baseMsg.setFromUserName("username");
@@ -36,7 +44,13 @@ public class ChatrobotApplicationTests {
 		    baseMsg.setText(s);
             System.out.println(handler.textMsgHandle(baseMsg));
         }
-        Thread.sleep(100000);
+	}
+
+	@Test
+	public void intervalAlarm() throws Exception{
+		String[] text = {"天王盖地虎", "周期提醒", "A每天 08:00:00 提醒我 起床"};
+		send(text);
+		Thread.sleep(100000);
 //		BaseMsg baseMsg = new BaseMsg();
 //		baseMsg.setText(text);
 //		BaseProcessor decision = manager.decision(baseMsg);

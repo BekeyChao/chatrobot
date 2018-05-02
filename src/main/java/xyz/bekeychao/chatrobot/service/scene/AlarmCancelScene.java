@@ -3,7 +3,7 @@ package xyz.bekeychao.chatrobot.service.scene;
 import cn.zhouyafeng.itchat4j.beans.BaseMsg;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import xyz.bekeychao.chatrobot.service.TaskService;
+import xyz.bekeychao.chatrobot.service.ScheduleService;
 import xyz.bekeychao.chatrobot.util.RegularUtil;
 
 /**
@@ -13,7 +13,7 @@ import xyz.bekeychao.chatrobot.util.RegularUtil;
 @Component
 public class AlarmCancelScene implements BaseSceneContext{
     @Autowired
-    private TaskService taskService;
+    private ScheduleService scheduleService;
 
     @Override
     public String sceneId() {
@@ -27,7 +27,7 @@ public class AlarmCancelScene implements BaseSceneContext{
         if (uuid == null) {
             return "不存在可以识别的UUID， 请按 提醒取消 ID 任务的ID 的格式发送给我";
         }
-        if (taskService.cancelSchedule(uuid)) {
+        if (scheduleService.cancelSchedule(uuid)) {
             return "OK，已取消";
         }
         return "任务可能不存在，或者我已经提醒过你了";

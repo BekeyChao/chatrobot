@@ -14,7 +14,7 @@ public class RegularUtil {
      * @return
      */
     public static String convertDateTime(String s) {
-        Pattern p = Pattern.compile("20\\d{2}-[0-2]?\\d-[0-3]?\\d(\\s+\\d{2}:\\d{2}:\\d{2})?");
+        Pattern p = Pattern.compile("20\\d{2}-[0-2]?\\d-[0-3]?\\d(\\s+\\d{1,2}:\\d{1,2}:\\d{1,2})?");
         return match(s, p);
     }
 
@@ -24,7 +24,7 @@ public class RegularUtil {
     }
 
     public static String convertTime(String s) {
-        Pattern p = Pattern.compile("\\d{2}:\\d{2}:\\d{2}");
+        Pattern p = Pattern.compile("\\d{1,2}:\\d{1,2}:\\d{1,2}");
         return match(s, p);
     }
 
