@@ -27,10 +27,13 @@ public class RobotController {
 
     private final MyLoginService myLoginService;
 
+    private final Core core;
+
     @Autowired
     public RobotController(CentreMessageHandler messageHandler, MyLoginService myLoginService) {
         this.messageHandler = messageHandler;
         this.myLoginService = myLoginService;
+        this.core = Core.getInstance();
     }
 
     @RequestMapping("/start")
@@ -59,9 +62,9 @@ public class RobotController {
     }
 
     @ResponseBody
-    @RequestMapping("/online")
-    public String online() {
-        return Core.getInstance().isAlive() ? "在线" : "离线";
+    @RequestMapping("/isAlive")
+    public boolean online() {
+        return core.isAlive();
     }
 
 }

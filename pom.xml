@@ -54,6 +54,12 @@
 			<version>5.1.2.Final</version>
 		</dependency>
 
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-devtools</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+
 		<!-- JDBC for mysql -->
 		<dependency>
 			<groupId>mysql</groupId>
