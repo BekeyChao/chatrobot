@@ -41,12 +41,25 @@
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
 
+		<!-- JPA 默认实现为Hibernate -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-data-jpa</artifactId>
+		</dependency>
+
 		<!-- hibernate 支持 LocalDateTime -->
-		<!--<dependency>-->
-			<!--<groupId>org.hibernate</groupId>-->
-			<!--<artifactId>hibernate-java8</artifactId>-->
-			<!--<version>5.1.2.Final</version>-->
-		<!--</dependency>-->
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-java8</artifactId>
+			<version>5.1.2.Final</version>
+		</dependency>
+
+		<!-- JDBC for mysql -->
+		<dependency>
+			<groupId>mysql</groupId>
+			<artifactId>mysql-connector-java</artifactId>
+			<scope>runtime</scope>
+		</dependency>
 
         <!-- itchat4j 的依赖 start -->
 		<!-- https://mvnrepository.com/artifact/org.apache.httpcomponents/httpclient -->

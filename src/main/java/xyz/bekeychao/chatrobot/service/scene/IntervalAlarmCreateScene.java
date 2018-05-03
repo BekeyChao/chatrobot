@@ -5,7 +5,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import xyz.bekeychao.chatrobot.domain.AlarmFuture;
+import xyz.bekeychao.chatrobot.domain.Alarm;
 import xyz.bekeychao.chatrobot.domain.AlarmRunnable;
 import xyz.bekeychao.chatrobot.service.ScheduleService;
 import xyz.bekeychao.chatrobot.util.CronUtil;
@@ -71,9 +71,8 @@ public class IntervalAlarmCreateScene implements BaseSceneContext {
         String cron = CronUtil.monthlyCorn(time, dayOfMonth);
         logger.info(cron);
 
-        AlarmRunnable runnable = new AlarmRunnable(userId, content);
-        AlarmFuture alarmFuture = scheduleService.scheduleCron(runnable, cron);
-        return String.format("宝宝记住了，我将在每月%s日 %s 发消息提醒你 %s， 任务ID %s", dayOfMonth, time.toString(), content, alarmFuture.getUuid());
+        String uuid = scheduleService.scheduleCron(userId, content, cron);
+        return String.format("宝宝记住了，我将在每月%s日 %s 发消息提醒你 %s， 任务ID %s", dayOfMonth, time.toString(), content, uuid);
     }
 
     private String weeklyAlarm(String daytime, String content, String userId) {
@@ -91,9 +90,10 @@ public class IntervalAlarmCreateScene implements BaseSceneContext {
         String cron = CronUtil.weeklyCorn(time, week);
         logger.info(cron);
 
-        AlarmRunnable runnable = new AlarmRunnable(userId, content);
-        AlarmFuture alarmFuture = scheduleService.scheduleCron(runnable, cron);
-        return String.format("宝宝记住了，我将在每%s %s 发消息提醒你 %s， 任务ID %s", week, time.toString(), content, alarmFuture.getUuid());
+        // 创建一个cron任务
+        String uuid = scheduleService.scheduleCron(userId, content, cron);
+
+        return String.format("宝宝记住了，我将在每%s %s 发消息提醒你 %s， 任务ID %s", week, time.toString(), content, uuid);
     }
 
     /**
@@ -125,9 +125,8 @@ public class IntervalAlarmCreateScene implements BaseSceneContext {
         String cron = CronUtil.dailyCorn(time);
         logger.info(cron);
 
-        AlarmRunnable runnable = new AlarmRunnable(userId, content);
-        AlarmFuture alarmFuture = scheduleService.scheduleCron(runnable, cron);
-        return String.format("宝宝记住了，我将在每天 %s 发消息提醒你 %s， 任务ID %s", time.toString(), content, alarmFuture.getUuid());
+        String uuid = scheduleService.scheduleCron(userId, content, cron);
+        return String.format("宝宝记住了，我将在每天 %s 发消息提醒你 %s， 任务ID %s", time.toString(), content, uuid);
     }
 
     @Override

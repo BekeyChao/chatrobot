@@ -5,7 +5,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import xyz.bekeychao.chatrobot.domain.AlarmFuture;
+import xyz.bekeychao.chatrobot.domain.Alarm;
 import xyz.bekeychao.chatrobot.domain.AlarmRunnable;
 import xyz.bekeychao.chatrobot.service.ScheduleService;
 import xyz.bekeychao.chatrobot.service.manager.ScheduleFutureHolder;
@@ -72,11 +72,10 @@ public class AlarmCreateScene implements BaseSceneContext{
                 return String.format("你希望我 %s 提醒你，但是臣妾...老子并不打算告诉你你穿越了", dateTime.toString());
             }
 
-            AlarmRunnable runnable = new AlarmRunnable(userId, spilt[1].trim());
-            // taskService
-            AlarmFuture alarmFuture = scheduleService.scheduleOnce(runnable, dateTime);
-            // TODO 可以将alarmFuture 持久化，达到任务取消的目的
-            return String.format("宝宝记住了，我将在 %s 发消息提醒你 %s， 任务ID %s", dateTime.toString(), spilt[1].trim(), alarmFuture.getUuid());
+            // taskService里面执行的流程比较多
+            String uuid = scheduleService.scheduleOnce(userId, spilt[1].trim(), dateTime);
+
+            return String.format("宝宝记住了，我将在 %s 发消息提醒你 %s， 任务ID %s", dateTime.toString(), spilt[1].trim(), uuid);
         }  catch (Exception e) {
             logger.warn("未知原因导致创建日程异常" , e);
             return "我可能遇到了什么麻烦，回头再来找我吧";

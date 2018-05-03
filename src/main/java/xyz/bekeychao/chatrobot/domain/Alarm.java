@@ -1,18 +1,25 @@
 package xyz.bekeychao.chatrobot.domain;
 
+import javax.persistence.Entity;
+import javax.persistence.Id;
 import java.time.LocalDateTime;
 
 /**
  * @author BekeyChao@github.com
  */
-public class AlarmFuture {
+@Entity
+public class Alarm {
 
+    @Id
     // 维护唯一Id
     private String uuid;
 
-    // 维护的任务实例
-//    @JsonIgnore
-//    private ScheduledFuture<?> future;
+    // 目标用户
+    private String userId;
+
+    // 内容
+    private String content;
+
     // corn表达式
     private String corn;
 
@@ -25,14 +32,25 @@ public class AlarmFuture {
     // 最后运行时间
     private LocalDateTime lastRunnableDate;
 
+    // 创建时间
+    private LocalDateTime createDate;
+
+    // 取消的
     private boolean cancelled;
 
-    public AlarmFuture(String uuid, LocalDateTime time, String corn, Long rate) {
-        this.uuid = uuid;
-        this.time = time;
+    // 删除的
+    private boolean deleted;
+
+    public Alarm(String userId, String content, String corn, LocalDateTime time, Long rate, LocalDateTime lastRunnableDate, LocalDateTime createDate) {
+        this.userId = userId;
+        this.content = content;
         this.corn = corn;
+        this.time = time;
         this.rate = rate;
+        this.lastRunnableDate = lastRunnableDate;
+        this.createDate = createDate;
         this.cancelled = false;
+        this.deleted = false;
     }
 
     public LocalDateTime getLastRunnableDate() {
@@ -81,5 +99,37 @@ public class AlarmFuture {
 
     public void setRate(Long rate) {
         this.rate = rate;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
+    }
+
+    public LocalDateTime getCreateDate() {
+        return createDate;
+    }
+
+    public void setCreateDate(LocalDateTime createDate) {
+        this.createDate = createDate;
+    }
+
+    public boolean isDeleted() {
+        return deleted;
+    }
+
+    public void setDeleted(boolean deleted) {
+        this.deleted = deleted;
     }
 }

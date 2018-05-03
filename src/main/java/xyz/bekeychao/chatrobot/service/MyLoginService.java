@@ -16,6 +16,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.OutputStream;
 
 /**
+ * 重写LoginServiceImpl的getQR方法，以实现自己获取二维码并发送到前台
  * @author BekeyChao@github.com
  */
 @Service
