@@ -5,11 +5,11 @@
 
 	<groupId>xyz.bekeychao</groupId>
 	<artifactId>chatrobot</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>0.0.1</version>
 	<packaging>jar</packaging>
 
 	<name>chatrobot</name>
-	<description>Demo project for Spring Boot</description>
+	<description>一个微信智障助手 + 聊天机器人</description>
 
 	<parent>
 		<groupId>org.springframework.boot</groupId>
@@ -22,6 +22,7 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<java.version>1.8</java.version>
+		<skipTests>true</skipTests>
 	</properties>
 
 	<dependencies>
@@ -117,7 +118,15 @@
 		</dependency>
 
         <!-- itchat4j 的依赖 end -->
-
+		<!-- itchat4j 本人做了一些修改，所以版本号多加一个.1 -->
+		<!-- https://github.com/yaphone/itchat4j -->
+		<dependency>
+			<groupId>cn.zhouyafeng</groupId>
+			<artifactId>itchat4j</artifactId>
+			<version>1.1.0.1</version>
+			<scope>system</scope>
+			<systemPath>${pom.basedir}/libs/itchat4j-1.1.0.jar</systemPath>
+		</dependency>
 	</dependencies>
 
 	<build>
@@ -125,6 +134,9 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
+				<configuration>
+					<includeSystemScope>true</includeSystemScope>
+				</configuration>
 			</plugin>
 		</plugins>
 	</build>

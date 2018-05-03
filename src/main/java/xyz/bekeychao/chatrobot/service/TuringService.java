@@ -41,6 +41,8 @@ public class TuringService {
             JSONObject obj = JSON.parseObject(result);
             if (obj.getString("code").equals("100000")) {
                 return obj.getString("text");
+            } else if (obj.getString("code").equals("40004")) {
+                return "今天和太多人聊天了，我太累了，要休息了";
             } else {
                 return  "你可能希望我说些什么，但是我并不知道说什么，换个话题吧";
             }
