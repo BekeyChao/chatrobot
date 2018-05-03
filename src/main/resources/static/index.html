@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>智障的后台</title>
+</head>
+<link rel="stylesheet" href="dist/css/bootstrap.min.css">
+<!--<link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">-->
+<style>
+    .main-container {
+        width: 100%;
+        max-width: 420px;
+        padding: 15px;
+        margin: 0 auto;
+    }
+    .center-top {
+        margin-top: 45%;
+    }
+
+</style>
+<body>
+<div class="main-container">
+    <button id="toLogin" class="btn btn-lg btn-primary btn-block center-top" >登陆</button>
+    <p id="status" class="fade btn btn-lg btn-primary btn-block center-top">在线中</p>
+    <p class="mt-5 mb-3 text-muted text-center">© 2017-2018</p>
+</div>
+<div id="login" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" class="modal fade bs-example-modal-lg">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                请扫码登陆
+            </div>
+            <div class="modal-body">
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+<!--<script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>-->
+<script src="dist/js/jquery-3.3.1.min.js"></script>
+<script src="dist/js/bootstrap.min.js"></script>
+<script>
+    let isLogging = false;
+    let isAlive = false;
+
+    $("#toLogin").click( function (even) {
+        $("#login img").remove();
+        $(".modal-body").append("<img class='img-responsive' src='/robot/start?_uid=' "+Math.random()+"/>" )
+        // $(".modal-body").append("<img class='center-block img-responsive' src='dist/QR.jpg' "+Math.random()+"/>" )
+        $("#login").modal('show')
+        isLogging = true;
+    } )
+
+    function checkAlive() {
+        $.get("/robot/isAlive", function (data) {
+            if (data) {
+                if (isLogging) {
+                    isLogging = false;
+                    $("#login").modal('hide')
+                }
+                if (!isAlive) {
+                    isAlive = true;
+                    $("#toLogin").addClass("fade");
+                    $("#status").removeClass("fade");
+                }
+            } else {
+                if (isAlive) {
+                    isAlive = false;
+                    $("#status").addClass("fade");
+                    $("#toLogin").removeClass("fade");
+                }
+            }
+        })
+    }
+    // 轮询  是否在线
+    setInterval(checkAlive, 3000);
+</script>
+</html>
