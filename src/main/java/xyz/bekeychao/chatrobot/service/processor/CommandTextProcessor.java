@@ -16,8 +16,8 @@ public class CommandTextProcessor implements TextProcessor {
 
     private final UserFilter userFilter;
 
-    private static final String ACTIVE = "聊天啊";
-    private static final String DISABLE = "disable robot";
+    private static final String ACTIVE = "召唤智障机器人";
+    private static final String DISABLE = "ByeBye";
     private static final String[] KEY_WORD_ARRAY = { ACTIVE, DISABLE};
 
     @Autowired
@@ -30,11 +30,14 @@ public class CommandTextProcessor implements TextProcessor {
         String text = message.getText();
         if (ACTIVE.equals(text)) {
             userFilter.addUser(message.getFromUserName());
-            return "很好，少年，你成功引起了我的注意";
+            return "┗|｀O′|┛我是可爱的宝宝机器人！！ \r\n" +
+                    "随便和我聊聊天吧，或者发送 定制提醒/周期提醒/提醒取消 来尝试定制消息吧 \r\n" +
+                    "或者发送 ByeBye 来失去宝宝\r\n" +
+                    "// 内测阶段";
          }
          if (DISABLE.equals(text)) {
              userFilter.removeUser(message.getFromUserName());
-            return "你将永远的失去宝宝";
+            return "你将永远的失去宝宝。";
         }
         throw new AnswerException("不存在可以响应的命令");
     }

@@ -44,7 +44,7 @@ public class TuringService {
             } else if (obj.getString("code").equals("40004")) {
                 return "今天和太多人聊天了，我太累了，要休息了";
             } else {
-                return  "你可能希望我说些什么，但是我并不知道说什么，换个话题吧";
+                return  "我还没满月，问我一些低智商的吧";
             }
         } catch (Exception e) {
             logger.info(e.getMessage());

@@ -13,6 +13,7 @@ import xyz.bekeychao.chatrobot.util.RegularUtil;
 
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 
 /**
  * 需要考虑的东西有点多
@@ -34,8 +35,12 @@ public class IntervalAlarmCreateScene implements BaseSceneContext {
 
     @Override
     public String act(String userId, BaseMsg message) {
-        String text = message.getText();
+        // 中文冒号 转 英文冒号
+        String text = message.getText().replace("：", ";");
+
+        // 根据 提醒我 分隔， 第一段为时间参数 第二段为内容参数
         String[] spilt = text.split("提醒我");
+
         if (spilt.length < 2 || spilt[1].trim().equals("")) {
             return "知道我为什么叫人工智障吗？因为你不按我要求的格式来，我就听不懂，┭┮﹏┭┮";
         }
@@ -48,7 +53,7 @@ public class IntervalAlarmCreateScene implements BaseSceneContext {
             case 'C':
                 return monthlyAlarm(spilt[0],spilt[1], userId);
             default:
-                return "莫非你选择了D？ 请在第一个字就告诉宝宝你的周期好不";
+                return "莫非你选择了D？ 请在第一个字母就告诉宝宝循环周期好不";
         }
     }
 
@@ -57,22 +62,24 @@ public class IntervalAlarmCreateScene implements BaseSceneContext {
         if (timeString == null) {
             return "嗯~ o(*￣▽￣*)o  我没看出来你每天提醒的时间啊 ~~~";
         }
-        LocalTime time = LocalTime.parse(timeString, DateTimeFormatter.ofPattern("HH:mm"));
-        String dayOfMonth = daytime.substring(daytime.indexOf("月") + 1, daytime.indexOf("日"));
+
         try {
+            LocalTime time = LocalTime.parse(timeString, DateTimeFormatter.ofPattern("HH:mm"));
+            String dayOfMonth = daytime.substring(daytime.indexOf("月") + 1, daytime.indexOf("日"));
             Integer day = Integer.parseInt(dayOfMonth);
             if (day < 1 || day > 31) {
                 return "设置一个不存在的日期并不好玩";
             }
+            String cron = CronUtil.monthlyCorn(time, dayOfMonth);
+            logger.info(cron);
+
+            String uuid = scheduleService.scheduleCron(userId, content, cron);
+            return String.format("宝宝记住了，我将在每月%s日 %s 发消息提醒你 %s， 任务ID %s", dayOfMonth, time.toString(), content, uuid);
         }catch (NumberFormatException e) {
             return "嗯~ o(*￣▽￣*)o 我没看出来你打算每月几号啊";
+        }catch (DateTimeParseException e) {
+            return "不按格式设置时间不是好孩子哟， 诺再给你个例子 每月1日 08:00:00";
         }
-
-        String cron = CronUtil.monthlyCorn(time, dayOfMonth);
-        logger.info(cron);
-
-        String uuid = scheduleService.scheduleCron(userId, content, cron);
-        return String.format("宝宝记住了，我将在每月%s日 %s 发消息提醒你 %s， 任务ID %s", dayOfMonth, time.toString(), content, uuid);
     }
 
     private String weeklyAlarm(String daytime, String content, String userId) {
@@ -80,20 +87,25 @@ public class IntervalAlarmCreateScene implements BaseSceneContext {
         if (timeString == null) {
             return "嗯~ o(*￣▽￣*)o  我没看出来你每天提醒的时间啊 ~~~";
         }
-        LocalTime time = LocalTime.parse(timeString, DateTimeFormatter.ofPattern("HH:mm"));
-        char weekChar = daytime.charAt(daytime.indexOf("星期") + 2);
-        String week = convertWeek(weekChar);
-        if (week == null) {
-            return "嗯~ o(*￣▽￣*)o  我没看出来你每周提醒的日期啊 ~~~";
+        try {
+            LocalTime time = LocalTime.parse(timeString, DateTimeFormatter.ofPattern("HH:mm"));
+            char weekChar = daytime.charAt(daytime.indexOf("星期") + 2);
+            String week = convertWeek(weekChar);
+            if (week == null) {
+                return "嗯~ o(*￣▽￣*)o  我没看出来你每周提醒的日期啊 ~~~";
+            }
+
+            String cron = CronUtil.weeklyCorn(time, week);
+            logger.info(cron);
+
+            // 创建一个cron任务
+            String uuid = scheduleService.scheduleCron(userId, content, cron);
+
+            return String.format("宝宝记住了，我将在每%s %s 发消息提醒你 %s， 任务ID %s", week, time.toString(), content, uuid);
+        }catch (DateTimeParseException e) {
+            return "不按格式设置时间不是好孩子哟， 诺再给你个例子 每星期天 08:00:00";
         }
 
-        String cron = CronUtil.weeklyCorn(time, week);
-        logger.info(cron);
-
-        // 创建一个cron任务
-        String uuid = scheduleService.scheduleCron(userId, content, cron);
-
-        return String.format("宝宝记住了，我将在每%s %s 发消息提醒你 %s， 任务ID %s", week, time.toString(), content, uuid);
     }
 
     /**
@@ -120,13 +132,16 @@ public class IntervalAlarmCreateScene implements BaseSceneContext {
         if (timeString == null) {
             return "嗯~ o(*￣▽￣*)o  我没看出来你每天提醒的时间啊 ~~~";
         }
-        LocalTime time = LocalTime.parse(timeString, DateTimeFormatter.ofPattern("HH:mm:ss"));
+        try {
+            LocalTime time = LocalTime.parse(timeString, DateTimeFormatter.ofPattern("HH:mm:ss"));
+            String cron = CronUtil.dailyCorn(time);
+            logger.info(cron);
 
-        String cron = CronUtil.dailyCorn(time);
-        logger.info(cron);
-
-        String uuid = scheduleService.scheduleCron(userId, content, cron);
-        return String.format("宝宝记住了，我将在每天 %s 发消息提醒你 %s， 任务ID %s", time.toString(), content, uuid);
+            String uuid = scheduleService.scheduleCron(userId, content, cron);
+            return String.format("宝宝记住了，我将在每天 %s 发消息提醒你 %s， 任务ID %s", time.toString(), content, uuid);
+        }catch (DateTimeParseException e) {
+            return "不按格式设置时间不是好孩子哟， 诺再给你个例子 每天08:00:00";
+        }
     }
 
     @Override

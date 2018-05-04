@@ -1,5 +1,6 @@
 package xyz.bekeychao.chatrobot.domain;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import java.time.LocalDateTime;
@@ -11,6 +12,7 @@ import java.time.LocalDateTime;
 public class Alarm {
 
     @Id
+    @Column(length = 64)
     // 维护唯一Id
     private String uuid;
 
@@ -40,6 +42,9 @@ public class Alarm {
 
     // 删除的
     private boolean deleted;
+
+    public Alarm() {
+    }
 
     public Alarm(String userId, String content, String corn, LocalDateTime time, Long rate, LocalDateTime lastRunnableDate, LocalDateTime createDate) {
         this.userId = userId;

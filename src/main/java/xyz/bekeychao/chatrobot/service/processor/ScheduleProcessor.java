@@ -45,10 +45,10 @@ public class ScheduleProcessor implements TextProcessor{
         BaseSceneContext context = SceneContextHolder.getSceneBySceneId(IntervalAlarmCreateScene.SCENE_ID);
         SceneContextHolder.setArgumentsByUserId(message.getFromUserName(), new Object[]{ context });
 
-        return "请选择循环周期，并按指定模板回复" +
-                "A 每天 模板 A 每天8:00:00 提醒我 提醒内容" +
-                "B 每星期 模板 B 每星期一 8:00:00 提醒我 提醒内容 // 周末表达为星期天或星期日" +
-                "C 每月 模板 C 每月15日 8:00:00 提醒我 提醒内容";
+        return "请选择循环周期，并按指定模板回复 \r\n" +
+                "A 每天 模板 A 每天08:00:00 提醒我 提醒内容 \r\n" +
+                "B 每星期 模板 B 每星期一 08:00:00 提醒我 提醒内容 // 周末表达为星期天或星期日 \r\n" +
+                "C 每月 模板 C 每月15日 08:00:00 提醒我 提醒内容";
 //                "循环周期 请回复 A每天 | B每星期 | C每月 | D每年 | E取消设置 五个选项选一";
     }
 
@@ -59,7 +59,8 @@ public class ScheduleProcessor implements TextProcessor{
             return context.act(message.getFromUserName(), message);
         }
         SceneContextHolder.setArgumentsByUserId(message.getFromUserName(), new Object[]{context});
-        return "请按 yyyy-MM-dd HH:mm:ss 提醒我 提醒内容 格式回复，其中具体时间可选，默认为早上8点";
+        return "请按 yyyy-MM-dd HH:mm:ss 提醒我 提醒内容 格式回复，其中具体时间可选，默认为早上8点 \r\n" +
+                "例如 2018-05-20 08:00:00 提醒我 情人劫到了";
     }
 
     private String alarmCancel(BaseMsg message) {

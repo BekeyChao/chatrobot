@@ -48,7 +48,7 @@ public class ChatrobotApplicationTests {
 
 	@Test
 	public void intervalAlarm() throws Exception{
-		String[] text = {"天王盖地虎", "周期提醒", "A每天 08:00:00 提醒我 起床"};
+		String[] text = {"召唤智障机器人", "定制提醒", "2018-05-04 12:11:59 提醒我 起床"};
 		send(text);
 		Thread.sleep(100000);
 //		BaseMsg baseMsg = new BaseMsg();

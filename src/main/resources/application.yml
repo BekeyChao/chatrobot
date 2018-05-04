@@ -6,6 +6,9 @@ server:
 
 spring:
   datasource: # set database config
+#      url: jdbc:mysql://localhost:3306/estate_agent?useUnicode=true&characterEncoding=utf8&useSSL=false
+#      username: normal
+#      password: normal
       # 修改为自己的连接
 #      url:
 #      username:
@@ -18,6 +21,3 @@ spring:
       ddl-auto: update # Hibernate ddl auto(create, create-drop, update)
       naming: # naming strategy
         strategy: org.hibernate.cfg.ImprovedNamingStrategy
-    properties:
-      hibernate: # stripped before adding them to entity manager
-        dialect: org.hibernate.dialect.MySQL5Dialect

@@ -6,6 +6,7 @@ import org.springframework.scheduling.support.CronTrigger;
 import org.springframework.stereotype.Service;
 import xyz.bekeychao.chatrobot.domain.Alarm;
 import xyz.bekeychao.chatrobot.domain.AlarmRunnable;
+import xyz.bekeychao.chatrobot.repository.AlarmRepository;
 import xyz.bekeychao.chatrobot.service.manager.ScheduleFutureHolder;
 
 import java.time.LocalDateTime;
@@ -22,14 +23,15 @@ public class ScheduleService {
     private final ThreadPoolTaskScheduler threadPoolTaskScheduler;
 
     private final ScheduleFutureHolder futureHolder;
-
-    private final AlarmService alarmService;
+    // 存在循环引用，只好直接依赖dao层
+//    private final AlarmService alarmService;
+    private final AlarmRepository alarmRepository;
 
     @Autowired
-    public ScheduleService(ThreadPoolTaskScheduler threadPoolTaskScheduler, ScheduleFutureHolder futureHolder, AlarmService alarmService) {
+    public ScheduleService(ThreadPoolTaskScheduler threadPoolTaskScheduler, ScheduleFutureHolder futureHolder, AlarmRepository alarmRepository) {
         this.threadPoolTaskScheduler = threadPoolTaskScheduler;
         this.futureHolder = futureHolder;
-        this.alarmService = alarmService;
+        this.alarmRepository = alarmRepository;
     }
 
     /**
@@ -39,29 +41,18 @@ public class ScheduleService {
      * @return 任务的UUID
      */
     public String scheduleCron(String userId, String content, String cron) {
-        AlarmRunnable runnable = productRunableAndSaveAlarm(userId, content, cron, null, null);
+        AlarmRunnable runnable = productRunnableAndSaveAlarm(userId, content, cron, null, null);
         ScheduledFuture<?> future = threadPoolTaskScheduler.schedule(runnable, new CronTrigger(cron));
         put(future, runnable.getUuid());
         return runnable.getUuid();
     }
-
-//    /**
-//     * 以固定时间创建一个单次任务
-//     * @param runnable
-//     * @param time
-//     * @return
-//     */
-//    public Alarm scheduleOnce(Runnable runnable, LocalDateTime time) {
-//        ScheduledFuture<?> future = threadPoolTaskScheduler.schedule(runnable, convertLDTtoDate(time));
-//        return put(future, null, time, null);
-//    }
 
     /**
      * 以固定时间为开始， 创建一个循环任务
      * @return 任务的UUID
      */
     public String scheduleFixedRate(String userId, String content, LocalDateTime time, long rate) {
-        AlarmRunnable runnable = productRunableAndSaveAlarm(userId, content, null, time, rate);
+        AlarmRunnable runnable = productRunnableAndSaveAlarm(userId, content, null, time, rate);
         ScheduledFuture<?> future = threadPoolTaskScheduler.scheduleAtFixedRate(runnable, convertLDTtoDate(time), rate);
         put(future, runnable.getUuid());
         return runnable.getUuid();
@@ -85,7 +76,7 @@ public class ScheduleService {
     }
 
     public String scheduleOnce(String userId, String content, LocalDateTime dateTime) {
-        AlarmRunnable runnable = productRunableAndSaveAlarm(userId, content, null, dateTime, null);
+        AlarmRunnable runnable = productRunnableAndSaveAlarm(userId, content, null, dateTime, null);
         ScheduledFuture<?> schedule = threadPoolTaskScheduler.schedule(runnable, convertLDTtoDate(dateTime));
         put(schedule, runnable.getUuid());
         return runnable.getUuid();
@@ -93,12 +84,12 @@ public class ScheduleService {
 
     /**
      */
-    private AlarmRunnable productRunableAndSaveAlarm(String userId, String content, String cron, LocalDateTime dateTime, Long rate) {
+    private AlarmRunnable productRunnableAndSaveAlarm(String userId, String content, String cron, LocalDateTime dateTime, Long rate) {
         Alarm alarm = new Alarm(userId, content, cron, dateTime, rate, null, LocalDateTime.now());
         String uuid = UUID.randomUUID().toString();
         alarm.setUuid(uuid);
-        // 持久化 -- 目的是在重启之后可以恢复数据
-        alarmService.saveOrUpdateAlarm(alarm);
+        // 持久化 -- 目的是在重启之后可以恢复数据 但是还没实现
+        alarmRepository.save(alarm);
         return new AlarmRunnable(uuid);
     }
 

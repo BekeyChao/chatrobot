@@ -10,6 +10,7 @@ import xyz.bekeychao.chatrobot.service.processor.UserFilter;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * @author BekeyChao@github.com
@@ -39,7 +40,8 @@ public class AlarmService {
 
     public Alarm getAlarmByUUID(String uuid) {
         Assert.notNull(uuid, "uuid can not be null");
-        return alarmRepository.getOne(uuid);
+        Optional<Alarm> alarm = alarmRepository.findById(uuid);
+        return alarm.orElse(null);
     }
 
     /**

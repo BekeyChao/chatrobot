@@ -15,6 +15,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.Arrays;
 
 /**
@@ -44,7 +45,8 @@ public class AlarmCreateScene implements BaseSceneContext{
     @Override
     public String act(String userId, BaseMsg message){
 
-        String text = message.getText();
+        // 中文冒号 转 英文冒号
+        String text = message.getText().replace("：", ";");
         String[] spilt = text.split("提醒我");
         if (spilt.length < 2 || spilt[1].trim().equals("")) {
             return "我有点笨，按指定格式回复我吧，缺少提醒内容，请重新按 定制提醒 yyyy-MM-dd HH:mm:ss 提醒我 内容 定制哦！";
@@ -76,7 +78,9 @@ public class AlarmCreateScene implements BaseSceneContext{
             String uuid = scheduleService.scheduleOnce(userId, spilt[1].trim(), dateTime);
 
             return String.format("宝宝记住了，我将在 %s 发消息提醒你 %s， 任务ID %s", dateTime.toString(), spilt[1].trim(), uuid);
-        }  catch (Exception e) {
+        } catch (DateTimeParseException e) {
+            return "不按格式设置时间不是好孩子哟， 诺再给你个例子 2018-05-20 08:00:00";
+        }catch (Exception e) {
             logger.warn("未知原因导致创建日程异常" , e);
             return "我可能遇到了什么麻烦，回头再来找我吧";
         }
