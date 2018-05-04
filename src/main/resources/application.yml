@@ -21,3 +21,5 @@ spring:
       ddl-auto: update # Hibernate ddl auto(create, create-drop, update)
       naming: # naming strategy
         strategy: org.hibernate.cfg.ImprovedNamingStrategy
+  profiles:
+      active: prod # 设置运行环境 dev开发 or prod生产
