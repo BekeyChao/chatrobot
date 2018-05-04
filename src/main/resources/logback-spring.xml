@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <!-- 设置上下文名称，默认为default，用于区分不同应用程序记录 -->
+    <contextName>Gafss-Console</contextName>
+    <!-- 设置变量 定义后通过${} 取值 -->
+    <property name="PATTERN" value="%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %le %logger{5} - %m%n"/>
+    <!--<property name="PATH" value="/home/ec2-user/log"/>-->
+    <property name="PATH" value="D:/log"/>
+    <!-- 将日志打印到控制台 -->
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <Pattern>${PATTERN}</Pattern>
+        </encoder>
+    </appender>
+
+    <!--生产环境  -->
+    <springProfile name="prod">
+        <!-- 将日志记录到文件中 -->
+        <appender name="PROD_LOG" class="ch.qos.logback.core.rolling.RollingFileAppender">
+            <File>${PATH}/gafss_console.log</File>
+            <!-- 等级过滤器 当日志记录请求的Level值小于ThresholdFilter中配置的Level值，日志记录请求被判定为无效-->
+            <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+                <level>INFO</level>
+                <!--<onMatch>ACCEPT</onMatch>-->
+                <!--<onMismatch>DENY</onMismatch>-->
+            </filter>
+            <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+                <FileNamePattern>${PATH}/gafss_console.%d{yyyy-MM-dd}.log</FileNamePattern>
+                <maxHistory>30</maxHistory>
+            </rollingPolicy>
+            <encoder>
+                <Pattern>${PATTERN}</Pattern>
+            </encoder>
+        </appender>
+
+        <!-- 生产环境下文件只记录INFO以上信息 -->
+        <logger name="xyz.bekeychao" level="info" additivity="false">
+            <appender-ref ref="STDOUT" />
+            <appender-ref ref="PROD_LOG" />
+        </logger>
+
+        <logger name="cn.zhouyafeng.itchat4j" level="info" additivity="false">
+            <appender-ref ref="STDOUT" />
+            <appender-ref ref="PROD_LOG" />
+        </logger>
+
+        <!-- 下面配置一些第三方包的日志过滤级别，用于避免刷屏 -->
+        <logger name="org.hibernate" level="WARN" />
+        <logger name="org.springframework" level="WARN" />
+        <!--<logger name="org.thymeleaf" level="WARN" />-->
+        <logger name="org.apache" level="WARN" />
+        <!-- show parameters for hibernate sql 专为 Hibernate 定制 -->
+        <!--<logger name="org.hibernate.type.descriptor.sql.BasicBinder"  level="TRACE" />-->
+        <!--<logger name="org.hibernate.type.descriptor.sql.BasicExtractor"  level="DEBUG" />-->
+        <!--<logger name="org.hibernate.SQL" level="DEBUG" />-->
+        <!--<logger name="org.hibernate.engine.QueryParameters" level="DEBUG" />-->
+        <!--<logger name="org.hibernate.engine.query.HQLQueryPlan" level="DEBUG" />-->
+    </springProfile>
+
+
+    <root level="INFO">
+        <appender-ref ref="STDOUT"/>
+    </root>
+</configuration>
